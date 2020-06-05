@@ -1,11 +1,15 @@
-import requests, json, re
+import json
+import re
+import requests
 
 
-def extrair():
+def extrair(titulo):
+    titulo = titulo.replace('_', ' ')
+
     parametros = {
         'action': 'query',
         'format': 'json',
-        'titles': 'Python',
+        'titles': titulo,
         'prop': 'extracts',
         'explaintext': True
     }
@@ -58,20 +62,21 @@ def escrever_json(conteudo):
     :param conteudo:
     :return:
     """
-    dicio = {}
+    dicio = {'texto': []}
     for i in range(0, len(conteudo)):
-        dicio.update({conteudo[i][0]: conteudo[i][1]})
+        dicio['texto'].append((conteudo[i][0], conteudo[i][1]))
+        # dicio.update({conteudo[i][0]: conteudo[i][1]})
 
     with open('arquivos/source.json', 'w', encoding='utf8') as arquivo_saida:
         saida = dict(dicio)
         json.dump(saida, arquivo_saida, ensure_ascii=False)
 
-    return dicio
+    return json.dumps(saida, ensure_ascii=False)
 
 
-def gerar_dicionario():
+def gerar_dicionario(titulo_do_artigo):
     # Extrair texto da Wikipedia
-    texto = extrair()
+    texto = extrair(titulo_do_artigo)
     # Faz uma lista com os títulos de cada tópico
     topicos = extrair_topicos(texto)
     # Gera um JSON cujas chaves são os tópicos e seus respectivos valores são os conteúdos
