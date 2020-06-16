@@ -1,11 +1,14 @@
 import json
 import re
 import requests
+from requests import RequestException
 
 
 def extrair(titulo):
-    titulo = titulo.replace('_', ' ')
-
+    """
+    :param titulo:
+    :return:
+    """
     parametros = {
         'action': 'query',
         'format': 'json',
@@ -14,15 +17,23 @@ def extrair(titulo):
         'explaintext': True
     }
 
-    response = requests.get(
-        'https://pt.wikipedia.org/w/api.php',
-        params=parametros
-    ).json()
-
-    page = next(iter(response['query']['pages'].values()))
-
-    # Este é o conteúdo em texto da página
-    return page['extract']
+    try:
+        response = requests.get(
+            'https://pt.wikipedia.org/w/api.php',
+            params=parametros
+        ).json()
+    # Exceção levantada quando há erro de conexão
+    except RequestException:
+        # raise irá rpassar a exceção para ser tratada depois, em outra parte do software
+        raise
+    # Exceção lançada quando não é encontrada uma página com o título passado
+    except KeyError:
+        raise
+    # Código executado se não ocorrer nenhuma exceção
+    else:
+        page = next(iter(response['query']['pages'].values()))
+        # Este é o conteúdo em texto da página
+        return page['extract']
 
 
 def extrair_topicos(texto):
@@ -36,7 +47,7 @@ def extrair_topicos(texto):
     # + uma ou mais ocorrências
     resultado = re.findall("==(.+?)==", texto)
 
-    irrelevantes = [' Ver também ', ' Referências ', ' Bibliografia ', ' Ligações Externas ']
+    irrelevantes = [' Ver também ', ' Referências ', ' Bibliografia ', ' Ligações externas ']
     # Pegamos apenas os tópicos relevantes
     topicos = [topico for topico in resultado if topico not in irrelevantes]
 
@@ -65,22 +76,25 @@ def escrever_json(conteudo):
     dicio = {'texto': []}
     for i in range(0, len(conteudo)):
         dicio['texto'].append((conteudo[i][0], conteudo[i][1]))
-        # dicio.update({conteudo[i][0]: conteudo[i][1]})
 
-    with open('arquivos/source.json', 'w', encoding='utf8') as arquivo_saida:
-        saida = dict(dicio)
-        json.dump(saida, arquivo_saida, ensure_ascii=False)
+    saida = dict(dicio)
 
     return json.dumps(saida, ensure_ascii=False)
 
 
 def gerar_dicionario(titulo_do_artigo):
-    # Extrair texto da Wikipedia
-    texto = extrair(titulo_do_artigo)
-    # Faz uma lista com os títulos de cada tópico
-    topicos = extrair_topicos(texto)
-    # Gera um JSON cujas chaves são os tópicos e seus respectivos valores são os conteúdos
-    return topicos
+    try:
+        # Extrair texto da Wikipedia
+        texto = extrair(titulo_do_artigo)
+    except KeyError:
+        raise
+    except RequestException:
+        raise
+    else:
+        # Faz uma lista com os títulos de cada tópico
+        topicos = extrair_topicos(texto)
+        # Gera um JSON cujas chaves são os tópicos e seus respectivos valores são os conteúdos
+        return topicos
 
 
 if __name__ == '__main__':

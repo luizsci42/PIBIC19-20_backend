@@ -1,9 +1,8 @@
 """
-Implementão da sumarização extrativa por tf-idf utilizando NLTK, de acordo com
+Implementação da sumarização extrativa por tf-idf utilizando NLTK, de acordo com
 o tutorial disponível em: https://towardsdatascience.com/text-summarization-using-tf-idf-e64a0644ace3
 """
 import math
-
 from nltk import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
@@ -106,23 +105,23 @@ def pontuar_periodos(matriz_tfidf) -> dict:
     return valorPeriodo
 
 
-def encontrar_pontuacao_media(valorPeriodo):
+def encontrar_pontuacao_media(valor_periodo):
     valores_soma = 0
 
-    for entrada in valorPeriodo:
-        valores_soma += valorPeriodo[entrada]
+    for entrada in valor_periodo:
+        valores_soma += valor_periodo[entrada]
 
-    media = (valores_soma / len(valorPeriodo))
+    media = (valores_soma / len(valor_periodo))
 
     return media
 
 
-def gerar_resumo(periodos, valorPeriodo, limiar):
+def gerar_resumo(periodos, valor_periodo, limiar):
     contador_periodo = 0
     resumo = ''
 
     for periodo in periodos:
-        if periodo[:15] in valorPeriodo and valorPeriodo[periodo[:15]] >= limiar:
+        if periodo[:15] in valor_periodo and valor_periodo[periodo[:15]] >= limiar:
             resumo += " " + periodo
             contador_periodo += 1
 
@@ -139,20 +138,28 @@ def tf_idf(texto):
     # 1
     periodos = sent_tokenize(texto)
     total_docs = len(periodos)
+    print("Número de documentos: " + str(total_docs))
     # 2
     matriz_freq = matriz_frequencia(periodos)
+    print("Matriz de frequência: " + str(matriz_freq))
     # 3
     matriz_tf = criar_matriz_tf(matriz_freq)
+    print("Matriz TF: " + str(matriz_tf))
     # 4
     cont_doc_por_palavras = criar_documentos_por_palavras(matriz_freq)
+    print("Contagem de documentos por palavras: " + str(cont_doc_por_palavras))
     # 5
     matriz_idf = criar_matriz_idf(matriz_freq, cont_doc_por_palavras, total_docs)
+    print("Matriz IDF: " + str(matriz_idf))
     # 6
     matriz_tfidf = criar_matriz_tfidf(matriz_tf, matriz_idf)
+    print("Matriz TF-IDF: " + str(matriz_tfidf))
     # 7
     pontuacao_periodos = pontuar_periodos(matriz_tfidf)
+    print("Pontuação dos períodos: " + str(pontuacao_periodos))
     # 8
     limiar = encontrar_pontuacao_media(pontuacao_periodos)
+    print("Limiar: " + str(limiar))
     # 9
     resumo = gerar_resumo(periodos, pontuacao_periodos, 1.1 * limiar)
 
