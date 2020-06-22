@@ -135,8 +135,10 @@ def tf_idf(texto):
     :param texto: O texto original a ser resumido
     :return: O texto resumido
     """
+    print("Texto original: " + texto)
     # 1
     periodos = sent_tokenize(texto)
+    # print("Períodos: " + str(periodos))
     total_docs = len(periodos)
     print("Número de documentos: " + str(total_docs))
     # 2
@@ -159,7 +161,7 @@ def tf_idf(texto):
     print("Pontuação dos períodos: " + str(pontuacao_periodos))
     # 8
     limiar = encontrar_pontuacao_media(pontuacao_periodos)
-    print("Limiar: " + str(limiar))
+    print("Limiar: " + str(limiar) + "\n\n")
     # 9
     resumo = gerar_resumo(periodos, pontuacao_periodos, 1.1 * limiar)
 

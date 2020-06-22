@@ -27,12 +27,8 @@ def main(titulo_do_artigo):
     else:
         topicos_e_resumos = []
         for i in range(0, len(original)):
-            try:
-                # Mandamos texto por texto para ser resumido
+            if original[i][1] != '':
                 resumo = tf_idf(original[i][1])
-            except ZeroDivisionError:
-                raise
-            else:
                 # Criamos uma lista de tuplas com os tópicos e seus respectivos conteúdos
                 topicos_e_resumos.append((original[i][0], resumo))
 
@@ -40,5 +36,5 @@ def main(titulo_do_artigo):
 
 
 if __name__ == '__main__':
-    titulo = "Ciência da computação"
+    titulo = "Google"
     main(titulo)
