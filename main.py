@@ -1,6 +1,6 @@
-import json
 from flask import Flask
 from requests import RequestException
+import os
 from sumarizador import main
 
 app = Flask(__name__)
@@ -53,3 +53,8 @@ def sumarizar(titulo_do_artigo):
     else:
         # retorna um JSON com os títulos dos tópicos e seus respectivos conteúdos sumarizados
         return arquivo_json
+
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
