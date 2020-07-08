@@ -200,6 +200,7 @@ def tf_idf(texto):
     :return: O texto resumido
     """
     nltk.download('punkt')
+    nltk.download("stopwords")
     print("Texto original: " + texto)
     # Tokenizamos as sentenças, ao invés das palavras
     periodos = sent_tokenize(texto)
