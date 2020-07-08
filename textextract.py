@@ -36,7 +36,7 @@ def extrair(titulo):
         return page['extract']
 
 
-def extrair_topicos(texto):
+def extrair_topicos(texto, titulo):
     """
     :param texto:
     :return:
@@ -60,7 +60,7 @@ def extrair_topicos(texto):
 
     # Vamos crirar uma lista de tuplas de pares ordenados
     # em que o primeiro item é o tópico e o segundo seu respectivo conteúdo
-    conteudo = [('Introdução', paragrafos[0])]
+    conteudo = [(titulo, paragrafos[0])]
     for i in range(0, len(topicos)):
         conteudo.append((topicos[i], paragrafos[i+1]))
 
@@ -92,7 +92,7 @@ def gerar_dicionario(titulo_do_artigo):
         raise
     else:
         # Faz uma lista com os títulos de cada tópico
-        topicos = extrair_topicos(texto)
+        topicos = extrair_topicos(texto, titulo_do_artigo)
         # Gera um JSON cujas chaves são os tópicos e seus respectivos valores são os conteúdos
         return topicos
 
