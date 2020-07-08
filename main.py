@@ -2,8 +2,10 @@ from flask import Flask
 from requests import RequestException
 import os
 from sumarizador import main
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 
 class SumarizadorError(Exception):
