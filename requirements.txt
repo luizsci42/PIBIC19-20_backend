@@ -2,3 +2,4 @@ spacy
 nltk
 requests
 flask
+flask_cors
