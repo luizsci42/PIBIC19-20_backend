@@ -3,6 +3,7 @@ Implementação da sumarização extrativa por tf-idf utilizando NLTK, de acordo
 o tutorial disponível em: https://towardsdatascience.com/text-summarization-using-tf-idf-e64a0644ace3
 """
 import math
+import nltk
 from nltk import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
@@ -198,6 +199,7 @@ def tf_idf(texto):
     :param texto: O texto original a ser resumido
     :return: O texto resumido
     """
+    nltk.download('punkt')
     print("Texto original: " + texto)
     # Tokenizamos as sentenças, ao invés das palavras
     periodos = sent_tokenize(texto)
