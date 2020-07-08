@@ -1,5 +1,6 @@
 sent_tokenize
 word_tokenize
 corpus
+stopwords
 stem
 punkt
