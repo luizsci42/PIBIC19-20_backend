@@ -2,3 +2,4 @@ sent_tokenize
 word_tokenize
 corpus
 stem
+punkt
