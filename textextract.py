@@ -2,8 +2,6 @@ import json
 import re
 import requests
 from requests import RequestException
-from PIL import Image
-from io import BytesIO
 
 
 def extrair_texto(titulo):
