@@ -19,7 +19,8 @@ def main(titulo_do_artigo):
     """
     # Dicionário com os respectívos tópicos e seus conteúdos extraídos da Wikipédia
     try:
-        original = gerar_dicionario(titulo_do_artigo)  # Pode lançar KeyErro e RequestException
+        # Pode lançar KeyError e RequestException
+        original, imagens = gerar_dicionario(titulo_do_artigo)
     except KeyError:
         raise
     except RequestException:
@@ -32,7 +33,7 @@ def main(titulo_do_artigo):
                 # Criamos uma lista de tuplas com os tópicos e seus respectivos conteúdos
                 topicos_e_resumos.append((original[i][0], resumo))
 
-        return escrever_json(topicos_e_resumos)
+        return escrever_json(topicos_e_resumos, imagens)
 
 
 if __name__ == '__main__':
