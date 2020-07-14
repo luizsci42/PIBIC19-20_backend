@@ -38,6 +38,7 @@ class ConexaoError(Exception):
 
 @app.route('/<titulo_do_artigo>')
 def sumarizar(titulo_do_artigo):
+    titulo_do_artigo = titulo_do_artigo.capitalize()
     try:
         arquivo_json = main(titulo_do_artigo)
     except ZeroDivisionError:
