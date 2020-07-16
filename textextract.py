@@ -71,12 +71,28 @@ def extrair_imagens(titulo):
             imagens.append(imagem['title'])
 
         fotos = extrair_imagens_aux(imagens)
+        print(fotos)
 
         return fotos
 
 
 def extrair_imagens_aux(titulos_imagens):
     enderecos = []
+    irrelevantes = [
+        'https://upload.wikimedia.org/wikipedia/commons/c/c2/Books-aj.svg_aj_ashton_01.png',
+        "https://upload.wikimedia.org/wikipedia/commons/4/4a/Commons-logo.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/d/d7/Crystal_Clear_app_ktalkd.png",
+        "https://upload.wikimedia.org/wikipedia/commons/b/bc/Cscr-featured1.png",
+        "https://upload.wikimedia.org/wikipedia/commons/4/4a/Disambig_grey.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/b/b6/Factory_1b.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/0/01/Flag_of_California.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/4/48/Folder_Hexagonal_Icon.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/6/65/Lock-green.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/3/3a/Magnifying_glass_01.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/f/ff/Wikidata-logo.svg"
+
+    ]
+
     for nome_imagem in titulos_imagens:
         parametros = {
             'action': 'query',
@@ -89,9 +105,12 @@ def extrair_imagens_aux(titulos_imagens):
         response = requests.get('https://pt.wikipedia.org/w/api.php', params=parametros).json()
         dados_imanges = next(iter(response['query']['pages'].values()))
         endereco = dados_imanges['imageinfo'][0]['url']
+
         enderecos.append(endereco)
 
-    return enderecos
+    urls = [endereco for endereco in enderecos if endereco not in irrelevantes]
+
+    return urls
 
 
 def extrair(titulo):
