@@ -1,12 +1,12 @@
 import json
 from requests import RequestException
-from tfidf_nltk import tf_idf
-from textextract import gerar_dicionario
-from textextract import escrever_json
+from src.modeling.tfidf_spacy import top_sentence
+from src.data_retrieval.textextract import gerar_dicionario
+from src.data_retrieval.textextract import escrever_json
 
 
 def escrever_arquivo(texto):
-    with open('arquivos/saida.json', 'w', encoding='utf8') as arquivo_saida:
+    with open('resources/arquivos/saida.json', 'w', encoding='utf8') as arquivo_saida:
         saida = dict(resumo=texto)
         json.dump(saida, arquivo_saida, ensure_ascii=False)
 
@@ -17,7 +17,7 @@ def main(titulo_do_artigo):
     :param titulo_do_artigo:
     :return:
     """
-    # Dicionário com os respectívos tópicos e seus conteúdos extraídos da Wikipédia
+    # Dicionário com os respectivos tópicos e seus conteúdos extraídos da Wikipédia
     try:
         # Pode lançar KeyError e RequestException
         original, imagens = gerar_dicionario(titulo_do_artigo)
@@ -29,7 +29,7 @@ def main(titulo_do_artigo):
         topicos_e_resumos = []
         for i in range(0, len(original)):
             if original[i][1] != '':
-                resumo = tf_idf(original[i][1])
+                resumo = top_sentence(original[i][1])
                 # Criamos uma lista de tuplas com os tópicos e seus respectivos conteúdos
                 topicos_e_resumos.append((original[i][0], resumo))
 
@@ -38,4 +38,5 @@ def main(titulo_do_artigo):
 
 if __name__ == '__main__':
     titulo = "Google"
-    main(titulo)
+    resumo = main(titulo)
+    print(resumo)

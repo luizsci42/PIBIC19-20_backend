@@ -5,10 +5,10 @@ https://medium.com/better-programming/extractive-text-summarization-using-spacy-
 import spacy
 from collections import Counter
 
-nlp = spacy.load('pt_core_news_sm')
 
-
-def top_sentence(text, limit):
+def top_sentence(text):
+    nlp = spacy.load('pt_core_news_lg')
+    limit = 3
     keyword = []
     pos_tag = ['PROPN', 'ADJ', 'NOUN', 'VERB']
     # Deixa o texto em letras minúsculas e faz a tokenização
@@ -38,7 +38,7 @@ def top_sentence(text, limit):
     for sent in doc.sents:
         # itera por cada palavra da frase, de acordo com a tokenização do SpaCy
         for word in sent:
-            # Determina se a plavra é uma palavra cave, de acordo com as palavras chave que extraímos anteriormente
+            # Determina se a palavra é uma palavra cave, de acordo com as palavras chave que extraímos anteriormente
             if word.text in freq_word.keys():
                 if sent in sent_strength.keys():
                     # adiciona a palavra normatizada ao par chave-valor da frase
@@ -54,7 +54,7 @@ def top_sentence(text, limit):
     counter = 0
     for i in range(len(sorted_x)):
         # Adicionamos a palavra à lista e deixamos a primeira letra maiúscula
-        summary.append(str(sorted_x[1][0]).capitalize())
+        summary.append(str(sorted_x[0][0]).capitalize())
         counter += 1
         if counter >= limit:
             # Quebramos o laço para que o número de iterações seja o que passamos como limite
